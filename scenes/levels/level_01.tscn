@@ -1,0 +1,193 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/levels/level_01.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scenes/levels/platform.gd" id="3_platform"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_goal"]
+size = Vector2(48, 128)
+
+[node name="Level01" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_level")
+
+[node name="Sky" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Sky"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.188235, 0.239216, 0.341176, 1)
+
+[node name="Platforms" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="Ground1" type="StaticBody2D" parent="Platforms"]
+position = Vector2(0, 680)
+script = ExtResource("3_platform")
+size = Vector2(1200, 64)
+
+[node name="Ground2" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1400, 680)
+script = ExtResource("3_platform")
+size = Vector2(900, 64)
+
+[node name="Ground3" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2500, 680)
+script = ExtResource("3_platform")
+size = Vector2(1100, 64)
+
+[node name="Ledge1" type="StaticBody2D" parent="Platforms"]
+position = Vector2(500, 540)
+script = ExtResource("3_platform")
+size = Vector2(200, 24)
+
+[node name="Ledge2" type="StaticBody2D" parent="Platforms"]
+position = Vector2(800, 420)
+script = ExtResource("3_platform")
+size = Vector2(200, 24)
+
+[node name="Ledge3" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1180, 560)
+script = ExtResource("3_platform")
+size = Vector2(180, 24)
+
+[node name="Ledge4" type="StaticBody2D" parent="Platforms"]
+position = Vector2(1700, 520)
+script = ExtResource("3_platform")
+size = Vector2(220, 24)
+
+[node name="Ledge5" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2000, 400)
+script = ExtResource("3_platform")
+size = Vector2(220, 24)
+
+[node name="Ledge6" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2300, 560)
+script = ExtResource("3_platform")
+size = Vector2(180, 24)
+
+[node name="Ledge7" type="StaticBody2D" parent="Platforms"]
+position = Vector2(2900, 540)
+script = ExtResource("3_platform")
+size = Vector2(240, 24)
+
+[node name="WallLeft" type="StaticBody2D" parent="Platforms"]
+position = Vector2(-64, 0)
+script = ExtResource("3_platform")
+size = Vector2(64, 744)
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(120, 600)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+process_mode = 1
+position = Vector2(120, 600)
+
+[node name="Goal" type="Area2D" parent="."]
+process_mode = 1
+position = Vector2(3450, 616)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Goal"]
+shape = SubResource("RectangleShape2D_goal")
+
+[node name="Pole" type="Polygon2D" parent="Goal"]
+color = Color(0.85, 0.85, 0.85, 1)
+polygon = PackedVector2Array(-4, -64, 4, -64, 4, 64, -4, 64)
+
+[node name="Flag" type="Polygon2D" parent="Goal"]
+color = Color(0.380392, 0.792157, 0.388235, 1)
+polygon = PackedVector2Array(4, -64, 52, -48, 4, -32)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="CharacterLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 424.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 22
+
+[node name="HelpLabel" type="Label" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -524.0
+offset_top = 16.0
+offset_right = -24.0
+offset_bottom = 44.0
+grow_horizontal = 0
+text = "A/D ou setas: mover  ·  Espaço/W: pular  ·  Esc: pausar"
+horizontal_alignment = 2
+
+[node name="FinishLabel" type="Label" parent="HUD"]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 120.0
+offset_right = 300.0
+offset_bottom = 170.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 36
+text = "Fase concluída!"
+horizontal_alignment = 1
+
+[node name="PauseLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 10
+
+[node name="PauseMenu" type="Control" parent="PauseLayer"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="PauseLayer/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Center" type="CenterContainer" parent="PauseLayer/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="PauseLayer/PauseMenu/Center"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="PauseLayer/PauseMenu/Center/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Pausado"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="PauseLayer/PauseMenu/Center/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Continuar"
+
+[node name="MenuButton" type="Button" parent="PauseLayer/PauseMenu/Center/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Menu principal"

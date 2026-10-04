@@ -1,83 +1,66 @@
-# Último Turno
+# Último Turno (nome provisório)
 
-Jogo 2D de plataforma feito com [Godot 4](https://godotengine.org/) e GDScript.
+Protótipo de **run and gun 2D** inspirado em Metal Slug, feito em Godot 4 + GDScript.
+Megacidade latino-americana, noite chuvosa, Kaze Corp. Esta etapa serve só para validar
+movimentação, tiro, combate e câmera numa fase curta. Toda a arte é placeholder desenhada
+por código (nenhuma imagem no projeto ainda).
 
-Versão atual (0.1.0): menu principal, seleção de personagem e uma primeira fase jogável.
-Ainda não há história; toda a arte é placeholder (formas coloridas).
-
-| Menu | Seleção de personagem | Fase 1 |
+| Combate | Percurso | Conclusão |
 | --- | --- | --- |
-| ![Menu](docs/screenshots/menu.png) | ![Seleção](docs/screenshots/selecao.png) | ![Fase 1](docs/screenshots/fase-1.png) |
+| ![Combate](docs/screenshots/combate.png) | ![Fase](docs/screenshots/fase.png) | ![Conclusão](docs/screenshots/conclusao.png) |
 
-## Preparando o ambiente
+## Como rodar
 
-1. Instale o **Godot 4.3 ou mais novo** (versão *Standard*, não precisa da versão .NET):
-   - Download: https://godotengine.org/download
-   - ou via gerenciador de pacotes: `winget install GodotEngine.GodotEngine` (Windows),
-     `brew install --cask godot` (macOS), `flatpak install flathub org.godotengine.Godot` (Linux).
-2. Clone o repositório:
-   ```bash
-   git clone https://github.com/PetersonFonsec/ultimo-turno.git
-   ```
-3. Abra o Godot, clique em **Importar**, selecione o arquivo `project.godot` na pasta clonada e depois **Importar e editar**.
-4. Aperte **F5** (ou o botão ▶) para rodar o jogo.
+1. Instale o **Godot 4.3 ou mais novo**, versão *Standard*: https://godotengine.org/download
+2. Clone o repositório e abra o Godot → **Importar** → selecione `project.godot` → **Importar e editar**.
+3. Aperte **F5**. No menu, clique em **Iniciar**.
 
-Pela linha de comando, com o executável do Godot no `PATH`:
+Linha de comando: `godot --path .` roda o jogo; `godot --path . --editor` abre o editor.
 
-```bash
-godot --path .            # roda o jogo
-godot --path . --editor   # abre o editor
-```
-
-> Se você abrir o projeto numa versão mais nova do Godot (4.4+), o editor pode pedir para
-> converter o projeto. Pode aceitar; só lembre de atualizar `GODOT_VERSION` no CI.
-
-### Editor de código (opcional)
-
-O editor interno do Godot é suficiente. Se preferir o VS Code, instale a extensão
-[godot-tools](https://marketplace.visualstudio.com/items?itemName=geequlim.godot-tools) e, no Godot,
-em *Editor > Configurações do Editor > Texto > Editor Externo*, aponte para o VS Code.
+O nome do jogo fica em *Projeto → Configurações do Projeto → Application → Config → Name*
+e é usado no menu e na janela.
 
 ## Controles
 
-| Ação | Teclas |
+| Ação | Tecla |
 | --- | --- |
 | Mover | `A` / `D` ou `←` / `→` |
-| Pular | `Espaço`, `W` ou `↑` (segure para pular mais alto) |
+| Pular | `Espaço` (segure para pular mais alto) |
+| Atirar | `J` (segure para tiro contínuo) |
+| Reiniciar a fase | `R` |
 | Pausar | `Esc` |
-| Navegar nos menus | Mouse ou setas + `Enter` |
 
-## Estrutura do projeto
+## O que tem
 
-```
-project.godot                 Configuração do projeto (cena inicial, autoloads, controles)
-scripts/autoload/game_state.gd Estado global: lista de personagens e personagem escolhido
-scenes/
-  menus/main_menu.*           Menu principal
-  menus/character_select.*    Seleção de personagem
-  player/player.*             Personagem jogável (CharacterBody2D)
-  levels/level_01.*           Primeira fase (HUD, pausa, bandeira de chegada)
-  levels/platform.gd          Plataforma retangular configurável pelo Inspetor
-assets/                       Sprites, áudio e fontes (vazio por enquanto)
-tests/smoke_test.gd           Teste automático do fluxo menu -> seleção -> fase
-```
+- **Jogador** (`scenes/player`): anda, pula com coyote time e buffer de pulo, vira para o lado
+  em que anda, atira na horizontal com cadência configurável, tem 5 de vida, pisca invulnerável
+  por 1 s após levar dano e sofre um pequeno recuo.
+- **Projéteis** (`scenes/combat`): cena separada para tiro do jogador e do inimigo
+  (camadas de colisão diferentes), com velocidade, dano e tempo de vida. Somem ao bater
+  em cenário ou alvo, com uma faísca de impacto.
+- **Agente Kaze** (`scenes/enemies`): patrulha entre dois pontos, detecta o jogador dentro do
+  alcance e com linha de visão, para, mostra um "!" e acende o cano antes de atirar. Morre com 3 tiros.
+- **HUD** (`scenes/ui`): vida, dica de controles e mensagens de pausa, morte e conclusão.
+- **Fase de teste** (`scenes/levels/test_level.tscn`): ~2400 px com caixas, passarelas,
+  uma barreira, dois buracos, 3 agentes e a saída. Cair mata. Câmera presa aos limites da fase.
+  Fundo com duas camadas de parallax e chuva, ambos placeholder.
+- Resolução interna 640×360, filtro *nearest* e escala inteira na janela.
 
-## Como estender
+Os parâmetros de jogo (velocidade, pulo, vida, cadência, dano, alcance, patrulha) ficam
+expostos no Inspetor de cada cena. Plataformas e caixas usam `scenes/levels/platform.gd`:
+duplique um nó em `World` e ajuste `size`, `color` e `one_way`.
 
-- **Novo personagem:** adicione uma entrada em `CHARACTERS` em `scripts/autoload/game_state.gd`
-  (nome, descrição, cor, `speed`, `jump_velocity`). A tela de seleção cria o card sozinha.
-- **Arte de verdade:** troque o `Polygon2D` `Body` em `scenes/player/player.tscn` por um
-  `Sprite2D`/`AnimatedSprite2D` com imagens em `assets/sprites/`.
-- **Plataformas:** na cena da fase, duplique um nó dentro de `Platforms` e ajuste `size`
-  e `color` no Inspetor; a colisão acompanha.
-- **Nova fase:** duplique `scenes/levels/level_01.tscn` e aponte para ela em `GameState`.
+Para trocar placeholders por sprites, substitua os `Polygon2D` dentro do nó `Visual` do
+jogador e do inimigo por um `AnimatedSprite2D`; a lógica não depende do visual.
 
-## Testes
+## Teste automático
 
 ```bash
 godot --headless --import
 godot --headless --script res://tests/smoke_test.gd
 ```
 
-O teste abre o menu, escolhe um personagem, entra na fase e verifica que o personagem
-cai no chão, anda e pula. O mesmo teste roda no GitHub Actions a cada push e pull request.
+Verifica movimento, pulo, coyote time, buffer, colisão com parede, tiro nas duas direções,
+paredes bloqueando tiros, cadência, dano do inimigo, invulnerabilidade, linha de visão,
+morte do inimigo, limites da câmera, pausa, conclusão, reinício, morte por queda e por dano,
+e um percurso automático do início até a saída. Roda no GitHub Actions a cada push e PR.

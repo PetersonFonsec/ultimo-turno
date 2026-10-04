@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/enemies/kaze_guard.gd" id="1_guard"]
+[ext_resource type="PackedScene" path="res://scenes/combat/enemy_bullet.tscn" id="2_bullet"]
+[ext_resource type="PackedScene" path="res://scenes/combat/death_burst.tscn" id="3_death"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(12, 24)
+
+[node name="KazeGuard" type="CharacterBody2D"]
+z_index = 1
+collision_layer = 4
+script = ExtResource("1_guard")
+projectile_scene = ExtResource("2_bullet")
+death_effect = ExtResource("3_death")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -12)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Legs" type="Polygon2D" parent="Visual"]
+color = Color(0.11, 0.12, 0.15, 1)
+polygon = PackedVector2Array(-5, -9, 5, -9, 5, 0, 1, 0, 1, -5, -1, -5, -1, 0, -5, 0)
+
+[node name="Armor" type="Polygon2D" parent="Visual"]
+color = Color(0.36, 0.4, 0.48, 1)
+polygon = PackedVector2Array(-6, -19, 6, -19, 6, -9, -6, -9)
+
+[node name="KazeStripe" type="Polygon2D" parent="Visual"]
+color = Color(0.85, 0.12, 0.2, 1)
+polygon = PackedVector2Array(-6, -15, 6, -15, 6, -14, -6, -14)
+
+[node name="Helmet" type="Polygon2D" parent="Visual"]
+color = Color(0.22, 0.25, 0.31, 1)
+polygon = PackedVector2Array(-5, -25, 4, -25, 5, -23, 5, -19, -5, -19)
+
+[node name="Visor" type="Polygon2D" parent="Visual"]
+color = Color(1, 0.25, 0.3, 1)
+polygon = PackedVector2Array(0, -23, 5, -23, 5, -21, 0, -21)
+
+[node name="Gun" type="Polygon2D" parent="Visual"]
+color = Color(0.5, 0.53, 0.58, 1)
+polygon = PackedVector2Array(1, -14, 11, -14, 11, -12, 4, -12, 4, -10, 1, -10)
+
+[node name="Muzzle" type="Marker2D" parent="Visual"]
+position = Vector2(12, -13)
+
+[node name="MuzzleFlash" type="Polygon2D" parent="Visual"]
+color = Color(1, 0.3, 0.4, 1)
+polygon = PackedVector2Array(11, -15, 14, -13, 11, -11)
+
+[node name="AlertMark" type="Polygon2D" parent="."]
+color = Color(1, 0.85, 0.3, 1)
+polygon = PackedVector2Array(-1, -36, 1, -36, 1, -31, -1, -31, -1, -30, 1, -30, 1, -28, -1, -28)

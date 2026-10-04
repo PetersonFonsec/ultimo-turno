@@ -1,25 +1,56 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scenes/player/player.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/combat/player_bullet.tscn" id="2_bullet"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(32, 48)
+size = Vector2(10, 22)
 
 [node name="Player" type="CharacterBody2D"]
+z_index = 2
+collision_layer = 2
+floor_snap_length = 4.0
 script = ExtResource("1_player")
-
-[node name="Body" type="Polygon2D" parent="."]
-color = Color(0.878431, 0.643137, 0.227451, 1)
-polygon = PackedVector2Array(-16, -24, 16, -24, 16, 24, -16, 24)
-
-[node name="Eye" type="Polygon2D" parent="Body"]
-color = Color(0.113725, 0.141176, 0.2, 1)
-polygon = PackedVector2Array(4, -16, 10, -16, 10, -8, 4, -8)
+projectile_scene = ExtResource("2_bullet")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -11)
 shape = SubResource("RectangleShape2D_body")
 
+[node name="Visual" type="Node2D" parent="."]
+
+[node name="Legs" type="Polygon2D" parent="Visual"]
+color = Color(0.17, 0.2, 0.28, 1)
+polygon = PackedVector2Array(-4, -9, 4, -9, 4, 0, 1, 0, 1, -5, -1, -5, -1, 0, -4, 0)
+
+[node name="Jacket" type="Polygon2D" parent="Visual"]
+color = Color(0.91, 0.54, 0.17, 1)
+polygon = PackedVector2Array(-5, -18, 5, -18, 5, -9, -5, -9)
+
+[node name="Stripe" type="Polygon2D" parent="Visual"]
+color = Color(0.95, 0.88, 0.5, 1)
+polygon = PackedVector2Array(-5, -12, 5, -12, 5, -11, -5, -11)
+
+[node name="Head" type="Polygon2D" parent="Visual"]
+color = Color(0.79, 0.55, 0.37, 1)
+polygon = PackedVector2Array(-3, -23, 3, -23, 3, -18, -3, -18)
+
+[node name="Hair" type="Polygon2D" parent="Visual"]
+color = Color(0.1, 0.08, 0.08, 1)
+polygon = PackedVector2Array(-4, -24, 3, -24, 3, -22, -2, -22, -2, -20, -4, -20)
+
+[node name="Gun" type="Polygon2D" parent="Visual"]
+color = Color(0.62, 0.65, 0.7, 1)
+polygon = PackedVector2Array(1, -15, 10, -15, 10, -13, 4, -13, 4, -11, 1, -11)
+
+[node name="Muzzle" type="Marker2D" parent="Visual"]
+position = Vector2(12, -14)
+
+[node name="MuzzleFlash" type="Polygon2D" parent="Visual"]
+color = Color(1, 0.92, 0.45, 1)
+polygon = PackedVector2Array(10, -17, 16, -14, 10, -11)
+
 [node name="Camera2D" type="Camera2D" parent="."]
-limit_left = 0
-limit_bottom = 720
+position = Vector2(0, -24)
 position_smoothing_enabled = true
+position_smoothing_speed = 8.0

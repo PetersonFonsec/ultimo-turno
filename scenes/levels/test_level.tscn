@@ -1,0 +1,243 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scenes/levels/test_level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scenes/levels/platform.gd" id="3_block"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/kaze_guard.tscn" id="4_guard"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="5_hud"]
+[ext_resource type="Script" path="res://scenes/background/skyline.gd" id="6_skyline"]
+
+[sub_resource type="Gradient" id="Gradient_rain"]
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rain"]
+gradient = SubResource("Gradient_rain")
+width = 1
+height = 6
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_sky"]
+colors = PackedColorArray(0.03, 0.035, 0.07, 1, 0.12, 0.08, 0.16, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sky"]
+gradient = SubResource("Gradient_sky")
+width = 4
+height = 64
+fill_to = Vector2(0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_goal"]
+size = Vector2(24, 40)
+
+[node name="TestLevel" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_level")
+
+[node name="Sky" type="CanvasLayer" parent="."]
+layer = -10
+
+[node name="Gradient" type="TextureRect" parent="Sky"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_sky")
+expand_mode = 1
+
+[node name="FarCity" type="Parallax2D" parent="."]
+z_index = -10
+scroll_scale = Vector2(0.2, 1)
+repeat_size = Vector2(640, 0)
+repeat_times = 2
+process_mode = 1
+
+[node name="Skyline" type="Node2D" parent="FarCity"]
+script = ExtResource("6_skyline")
+min_height = 120.0
+max_height = 240.0
+color = Color(0.08, 0.09, 0.16, 1)
+window_chance = 0.05
+seed_value = 7
+
+[node name="MidCity" type="Parallax2D" parent="."]
+z_index = -9
+scroll_scale = Vector2(0.5, 1)
+repeat_size = Vector2(640, 0)
+repeat_times = 2
+process_mode = 1
+
+[node name="Skyline" type="Node2D" parent="MidCity"]
+script = ExtResource("6_skyline")
+min_height = 50.0
+max_height = 150.0
+min_building_width = 32.0
+max_building_width = 90.0
+color = Color(0.11, 0.12, 0.2, 1)
+window_chance = 0.14
+seed_value = 21
+
+[node name="KazeSign" type="Label" parent="MidCity"]
+offset_left = 420.0
+offset_top = 120.0
+offset_right = 500.0
+offset_bottom = 146.0
+theme_override_colors/font_color = Color(0.85, 0.12, 0.2, 0.75)
+theme_override_font_sizes/font_size = 20
+text = "KAZE"
+
+[node name="World" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="WallLeft" type="StaticBody2D" parent="World"]
+position = Vector2(-16, 0)
+script = ExtResource("3_block")
+size = Vector2(16, 360)
+color = Color(0.17, 0.19, 0.25, 1)
+
+[node name="GroundA" type="StaticBody2D" parent="World"]
+position = Vector2(0, 328)
+script = ExtResource("3_block")
+size = Vector2(720, 32)
+color = Color(0.17, 0.19, 0.25, 1)
+
+[node name="Crate1" type="StaticBody2D" parent="World"]
+position = Vector2(220, 304)
+script = ExtResource("3_block")
+size = Vector2(24, 24)
+color = Color(0.42, 0.31, 0.18, 1)
+
+[node name="CrateStack" type="StaticBody2D" parent="World"]
+position = Vector2(420, 296)
+script = ExtResource("3_block")
+size = Vector2(32, 32)
+color = Color(0.42, 0.31, 0.18, 1)
+
+[node name="GroundB" type="StaticBody2D" parent="World"]
+position = Vector2(776, 328)
+script = ExtResource("3_block")
+size = Vector2(624, 32)
+color = Color(0.17, 0.19, 0.25, 1)
+
+[node name="Catwalk1" type="StaticBody2D" parent="World"]
+position = Vector2(880, 280)
+script = ExtResource("3_block")
+size = Vector2(96, 8)
+color = Color(0.33, 0.38, 0.45, 1)
+one_way = true
+
+[node name="Catwalk2" type="StaticBody2D" parent="World"]
+position = Vector2(1010, 240)
+script = ExtResource("3_block")
+size = Vector2(96, 8)
+color = Color(0.33, 0.38, 0.45, 1)
+one_way = true
+
+[node name="Barrier" type="StaticBody2D" parent="World"]
+position = Vector2(1150, 288)
+script = ExtResource("3_block")
+size = Vector2(16, 40)
+color = Color(0.33, 0.38, 0.45, 1)
+
+[node name="GroundC" type="StaticBody2D" parent="World"]
+position = Vector2(1460, 328)
+script = ExtResource("3_block")
+size = Vector2(940, 32)
+color = Color(0.17, 0.19, 0.25, 1)
+
+[node name="Container" type="StaticBody2D" parent="World"]
+position = Vector2(1600, 296)
+script = ExtResource("3_block")
+size = Vector2(96, 32)
+color = Color(0.2, 0.32, 0.36, 1)
+
+[node name="Catwalk3" type="StaticBody2D" parent="World"]
+position = Vector2(1760, 256)
+script = ExtResource("3_block")
+size = Vector2(80, 8)
+color = Color(0.33, 0.38, 0.45, 1)
+one_way = true
+
+[node name="Crate2" type="StaticBody2D" parent="World"]
+position = Vector2(1900, 304)
+script = ExtResource("3_block")
+size = Vector2(24, 24)
+color = Color(0.42, 0.31, 0.18, 1)
+
+[node name="WallRight" type="StaticBody2D" parent="World"]
+position = Vector2(2400, 0)
+script = ExtResource("3_block")
+size = Vector2(16, 360)
+color = Color(0.17, 0.19, 0.25, 1)
+
+[node name="Goal" type="Area2D" parent="."]
+process_mode = 1
+position = Vector2(2340, 328)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Goal"]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_goal")
+
+[node name="Frame" type="Polygon2D" parent="Goal"]
+color = Color(0.33, 0.38, 0.45, 1)
+polygon = PackedVector2Array(-14, -44, 14, -44, 14, 0, -14, 0)
+
+[node name="Door" type="Polygon2D" parent="Goal"]
+color = Color(0.2, 0.85, 0.5, 1)
+polygon = PackedVector2Array(-10, -40, 10, -40, 10, 0, -10, 0)
+
+[node name="Label" type="Label" parent="Goal"]
+offset_left = -20.0
+offset_top = -60.0
+offset_right = 20.0
+offset_bottom = -46.0
+theme_override_colors/font_color = Color(0.2, 0.85, 0.5, 1)
+theme_override_font_sizes/font_size = 10
+text = "SAÍDA"
+horizontal_alignment = 1
+
+[node name="Enemies" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="Guard1" parent="Enemies" instance=ExtResource("4_guard")]
+position = Vector2(580, 328)
+patrol_left = -40.0
+patrol_right = 40.0
+
+[node name="Guard2" parent="Enemies" instance=ExtResource("4_guard")]
+position = Vector2(1290, 328)
+patrol_left = -48.0
+patrol_right = 48.0
+
+[node name="Guard3" parent="Enemies" instance=ExtResource("4_guard")]
+position = Vector2(1648, 296)
+patrol_left = -30.0
+patrol_right = 30.0
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+process_mode = 1
+position = Vector2(48, 328)
+
+[node name="Rain" type="CanvasLayer" parent="."]
+layer = 1
+
+[node name="Particles" type="CPUParticles2D" parent="Rain"]
+process_mode = 1
+position = Vector2(320, -8)
+amount = 90
+lifetime = 0.9
+preprocess = 1.0
+texture = SubResource("GradientTexture2D_rain")
+emission_shape = 3
+emission_rect_extents = Vector2(380, 1)
+particle_flag_align_y = true
+direction = Vector2(-0.15, 1)
+spread = 0.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 380.0
+initial_velocity_max = 440.0
+color = Color(0.55, 0.65, 0.9, 0.3)
+
+[node name="HUD" parent="." instance=ExtResource("5_hud")]

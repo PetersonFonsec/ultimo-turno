@@ -1,16 +1,21 @@
 @tool
 extends StaticBody2D
-## Plataforma retangular placeholder. Ajuste "size" e "color" no Inspetor;
-## o visual e a colisão são gerados a partir deles.
+## Bloco retangular placeholder (chão, parede, caixa ou passarela).
+## Ajuste "size" e "color" no Inspetor; visual e colisão acompanham.
 
-@export var size: Vector2 = Vector2(256, 32):
+@export var size: Vector2 = Vector2(64, 16):
 	set(value):
 		size = value
 		_rebuild()
-@export var color: Color = Color("5b6b8c"):
+@export var color: Color = Color("2b3140"):
 	set(value):
 		color = value
 		queue_redraw()
+## Passarela: dá para subir por baixo e ficar em cima.
+@export var one_way: bool = false:
+	set(value):
+		one_way = value
+		_rebuild()
 
 
 func _ready() -> void:
@@ -29,9 +34,16 @@ func _rebuild() -> void:
 	shape.size = size
 	collision.shape = shape
 	collision.position = size / 2.0
+	collision.one_way_collision = one_way
 	queue_redraw()
 
 
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, size), color)
-	draw_rect(Rect2(Vector2.ZERO, Vector2(size.x, 4)), color.lightened(0.25))
+	draw_rect(Rect2(Vector2.ZERO, Vector2(size.x, 2)), color.lightened(0.35))
+	if one_way:
+		# Treliça de passarela industrial.
+		var x := 4.0
+		while x < size.x:
+			draw_rect(Rect2(x, 2, 1, size.y - 2), color.darkened(0.4))
+			x += 8.0

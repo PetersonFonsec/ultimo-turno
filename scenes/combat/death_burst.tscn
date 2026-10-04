@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/combat/impact.gd" id="1_impact"]
+
+[node name="DeathBurst" type="Node2D"]
+z_index = 10
+script = ExtResource("1_impact")
+color = Color(1, 0.3, 0.35, 1)
+duration = 0.3
+max_radius = 14.0
